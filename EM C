@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <math.h>
+
+// Função para calcular o valor da função f(x)
+float func(float x)
+{
+    return x*x - 4; // Exemplo: f(x) = x^2 - 4
+}
+
+// Função para inserir a entrada
+float get_input(char* message)
+{
+    float x;
+    printf("%s", message);
+    scanf("%f", &x);
+    return x;
+}
+
+int main()
+{
+    float a, b, c, fa, fb, fc, eps;
+    int iter = 0, iter_max = 1000;
+
+    // Obter entrada do usuário para os valores de a, b e eps
+    a = get_input("Insira o valor de a: ");
+    b = get_input("Insira o valor de b: ");
+    eps = get_input("Insira o valor de eps: ");
+
+    // Verificar se o intervalo é válido
+    if (func(a)*func(b) > 0)
+    {
+        printf("Erro: a e b não possuem sinais diferentes na função f(x)\n");
+        return 1;
+    }
+
+    // Loop principal do método da bissecção
+    do
+    {
+        c = (a + b)/2.0; // Calcular o ponto médio
+        fa = func(a);
+        fb = func(b);
+        fc = func(c);
+
+        // Verificar qual metade do intervalo contém a raiz
+        if (fc == 0)
+        {
+            printf("Raiz encontrada em x = %f\n", c);
+            return 0;
+        }
+        else if (fa*fc < 0)
+        {
+            b = c;
+        }
+        else
+        {
+            a = c;
+        }
+
+        iter++; // Incrementar o número de iterações
+    }
+    while (fabs(b - a) > eps && iter < iter_max); // Critério de parada
+
+    // Verificar se o método convergiu ou não
+    if (iter == iter_max)
+    {
+        printf("Erro: número máximo de iterações atingido\n");
+        return 1;
+    }
+    else
+    {
+        printf("Raiz encontrada em x = %f após %d iterações\n", c, iter);
+        return 0;
+    }
+}
